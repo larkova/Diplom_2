@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.yandex.praktikum.client.OrderClient;
 import ru.yandex.praktikum.client.UserClient;
 import ru.yandex.praktikum.model.User;
 import ru.yandex.praktikum.model.UserCredentials;
@@ -21,6 +22,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 public class GetOrderWithAuthorizationTest {
     private UserClient userClient;
     private String accessToken;
+    private OrderClient orderClient;
 
     @BeforeClass
     public static void globalSetUp() {
@@ -59,7 +61,7 @@ public class GetOrderWithAuthorizationTest {
                 .body("accessToken", notNullValue())
                 .extract().path("accessToken");
 
-        userClient.getAllOrders(accessToken)
+        orderClient.getAllOrders(accessToken)
                 .assertThat()
                 .statusCode(SC_OK)
                 .and()
@@ -68,7 +70,6 @@ public class GetOrderWithAuthorizationTest {
                 .and()
                 .assertThat()
                 .body("orders", notNullValue());
-
     }
 
 }

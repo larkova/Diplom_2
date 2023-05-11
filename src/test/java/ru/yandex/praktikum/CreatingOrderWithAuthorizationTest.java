@@ -73,7 +73,7 @@ public class CreatingOrderWithAuthorizationTest {
                 .body("accessToken", notNullValue())
                 .extract().path("accessToken");
 
-        userClient.createOrderWithToken(order, accessToken)
+        orderClient.createOrderWithToken(order, accessToken)
                 .assertThat()
                 .statusCode(SC_OK)
                 .and()
@@ -102,7 +102,7 @@ public class CreatingOrderWithAuthorizationTest {
                 .body("accessToken", notNullValue())
                 .extract().path("accessToken");
 
-        userClient.createOrderWithToken(order, accessToken)
+        orderClient.createOrderWithToken(order, accessToken)
                 .assertThat()
                 .statusCode(SC_BAD_REQUEST)
                 .and()
@@ -137,7 +137,7 @@ public class CreatingOrderWithAuthorizationTest {
                 .body("accessToken", notNullValue())
                 .extract().path("accessToken");
 
-        userClient.createOrderWithToken(order, accessToken)
+        orderClient.createOrderWithToken(order, accessToken)
                 .assertThat()
                 .statusCode(SC_INTERNAL_SERVER_ERROR);
     }

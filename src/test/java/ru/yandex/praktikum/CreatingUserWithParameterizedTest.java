@@ -6,6 +6,7 @@ import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,8 +14,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import ru.yandex.praktikum.client.UserClient;
 import ru.yandex.praktikum.model.User;
+import ru.yandex.praktikum.model.UserCredentials;
+
 import static org.apache.http.HttpStatus.SC_FORBIDDEN;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 
 @RunWith(Parameterized.class)
@@ -23,6 +27,7 @@ public class CreatingUserWithParameterizedTest {
     private final String email;
     private final String password;
     private final String name;
+    private String accessToken;
 
     public CreatingUserWithParameterizedTest (String email, String password, String name){
 
@@ -51,6 +56,11 @@ public class CreatingUserWithParameterizedTest {
         userClient = new UserClient();
     }
 
+    @After
+    public void clearData() {
+        userClient.delete(accessToken);
+    }
+
     @Test
     @DisplayName("Создание учетной записи с незаполненным обязательным полем")
     @Description("Учетная запись не будет создана без обязательных полей")
@@ -66,6 +76,11 @@ public class CreatingUserWithParameterizedTest {
                 .and()
                 .assertThat()
                 .body("message", is("Email, password and name are required fields"));
+
+        accessToken = userClient.login(UserCredentials.from(user))
+                .assertThat()
+                .body("accessToken", notNullValue())
+                .extract().path("accessToken");
     }
 }
 

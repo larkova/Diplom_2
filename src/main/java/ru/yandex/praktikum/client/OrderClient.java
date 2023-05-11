@@ -21,6 +21,26 @@ public class OrderClient extends BurgerRestClient {
                 .post(ORDER_URI)
                 .then();
     }
+    @Step("Create order with token")
+    public ValidatableResponse createOrderWithToken(Order order, String accessToken) {
+        return given()
+                .spec(getBaseReqSpec())
+                .header("Authorization", accessToken)
+                .body(order)
+                .when()
+                .post(BASE_URI+ "orders")
+                .then();
+    }
+
+    @Step("Get order with token")
+    public ValidatableResponse getAllOrders (String accessToken) {
+        return given()
+                .spec(getBaseReqSpec())
+                .header("Authorization", accessToken)
+                .when()
+                .get(BASE_URI+ "orders/all")
+                .then();
+    }
     @Step("Get order")
     public ValidatableResponse getAllOrders () {
         return given()
